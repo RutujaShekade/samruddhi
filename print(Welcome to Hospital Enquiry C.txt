@@ -1,0 +1,37 @@
+print("Welcome to Hospital Enquiry Chatbot!")
+print("How can I help you?")
+print("Type 'bye' to exit.")
+
+while True:
+    user = input("\nYou: ").lower()
+
+    if "hello" in user or "hi" in user:
+        print("Bot: Hello! Welcome to our hospital.")
+
+    elif "doctor" in user:
+        print("Bot: Our hospital has specialist doctors.")
+
+    elif "appointment" in user:
+        print("Bot: You can book an appointment at the reception.")
+
+    elif "timing" in user:
+        print("Bot: Our hospital is open 24 hours.")
+
+    elif "emergency" in user:
+        print("Bot: For emergencies, please contact hospital emergency services immediately.")
+
+    elif "ambulance" in user:
+        print("Bot: Please contact our emergency department for ambulance assistance.")
+
+    elif "department" in user:
+        print("Bot: We have Cardiology, Neurology, Orthopedics and Pediatrics departments.")
+
+    elif "address" in user or "location" in user:
+        print("Bot: Please check our hospital website for the exact location.")
+
+    elif "bye" in user:
+        print("Bot: Thank you for contacting our hospital. Goodbye!")
+        break
+
+    else:
+        print("Bot: Sorry, I didn't understand your question.")

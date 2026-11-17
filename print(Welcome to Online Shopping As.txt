@@ -1,0 +1,37 @@
+print("Welcome to Online Shopping Assistant!")
+print("How can I help you?")
+print("Type 'bye' to exit.")
+
+while True:
+    user = input("\nYou: ").lower()
+
+    if "hello" in user or "hi" in user:
+        print("Bot: Hello! Welcome to our online shopping store.")
+
+    elif "products" in user:
+        print("Bot: We have clothes, electronics, shoes and accessories.")
+
+    elif "price" in user:
+        print("Bot: Product prices are available on the product page.")
+
+    elif "order" in user:
+        print("Bot: You can place an order by adding products to your cart.")
+
+    elif "payment" in user:
+        print("Bot: We accept UPI, debit cards, credit cards and cash on delivery.")
+
+    elif "delivery" in user:
+        print("Bot: Delivery usually takes 3 to 7 working days.")
+
+    elif "return" in user:
+        print("Bot: Products can be returned according to our return policy.")
+
+    elif "discount" in user or "offer" in user:
+        print("Bot: Check our website for the latest offers and discounts.")
+
+    elif "bye" in user:
+        print("Bot: Thank you for shopping with us. Goodbye!")
+        break
+
+    else:
+        print("Bot: Sorry, I couldn't understand your query.")

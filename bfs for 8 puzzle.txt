@@ -1,0 +1,83 @@
+from collections import deque
+
+# Initial State
+start = (7, 2, 4,
+         5, 0, 6,
+         8, 3, 1)
+
+# Goal State
+goal = (0, 1, 2,
+        3, 4, 5,
+        6, 7, 8)
+
+
+# BFS Algorithm
+def bfs():
+
+    queue = deque([start])
+    visited = {start}
+    parent = {start: None}
+    moves = {}
+
+    directions = [
+        (-1, 0, "Up"),
+        (1, 0, "Down"),
+        (0, -1, "Left"),
+        (0, 1, "Right")
+    ]
+
+    while queue:
+
+        state = queue.popleft()
+
+        if state == goal:
+            break
+
+        zero = state.index(0)
+        x, y = divmod(zero, 3)
+
+        for dx, dy, action in directions:
+
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < 3 and 0 <= ny < 3:
+
+                new_pos = nx * 3 + ny
+
+                new_state = list(state)
+
+                new_state[zero], new_state[new_pos] = \
+                    new_state[new_pos], new_state[zero]
+
+                new_state = tuple(new_state)
+
+                if new_state not in visited:
+
+                    visited.add(new_state)
+                    parent[new_state] = state
+                    moves[new_state] = action
+
+                    queue.append(new_state)
+
+    # Print Solution
+    path = []
+    state = goal
+
+    while state != start:
+        path.append((moves[state], state))
+        state = parent[state]
+
+    path.reverse()
+
+    print("Initial State:")
+    print(start)
+
+    for action, state in path:
+        print("Move:", action)
+        print(state)
+
+    print("Goal Reached!")
+    print("Total Moves:", len(path))
+
+
+bfs()

@@ -1,0 +1,83 @@
+from collections import deque
+
+# 0 = Free Path, 1 = Obstacle
+grid = [
+    [0, 0, 1, 0, 0],
+    [0, 0, 1, 0, 1],
+    [1, 0, 0, 0, 0],
+    [0, 1, 1, 0, 0],
+    [0, 0, 0, 0, 0]
+]
+
+# Starting and Goal Positions
+start = (0, 0)
+goal = (4, 4)
+
+# Possible Movements
+moves = [
+    (-1, 0, "Up"),
+    (1, 0, "Down"),
+    (0, -1, "Left"),
+    (0, 1, "Right")
+]
+
+
+# BFS Algorithm
+def bfs():
+
+    queue = deque([start])
+    visited = {start}
+    parent = {start: None}
+    action = {}
+
+    while queue:
+
+        x, y = queue.popleft()
+
+        if (x, y) == goal:
+            break
+
+        for dx, dy, direction in moves:
+
+            nx = x + dx
+            ny = y + dy
+
+            if (0 <= nx < 5 and 0 <= ny < 5
+                and grid[nx][ny] == 0
+                and (nx, ny) not in visited):
+
+                next_pos = (nx, ny)
+
+                visited.add(next_pos)
+                parent[next_pos] = (x, y)
+                action[next_pos] = direction
+
+                queue.append(next_pos)
+
+    # Print Path
+    if goal not in parent:
+        print("No Path Found")
+        return
+
+    path = []
+    current = goal
+
+    while current != start:
+        path.append((action[current], current))
+        current = parent[current]
+
+    path.reverse()
+
+    print("Robot Path:")
+
+    print("Start:", start)
+
+    for direction, position in path:
+        print(direction, "->", position)
+
+    print("Goal Reached!")
+    print("Total Steps:", len(path))
+
+
+# Run Program
+bfs()

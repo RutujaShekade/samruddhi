@@ -1,0 +1,81 @@
+# Sudoku Solver using Backtracking and Constraint Propagation
+
+grid = [
+    [8,0,2,0,0,3,5,1,0],
+    [0,6,0,0,9,1,0,0,3],
+    [7,0,1,0,0,0,8,9,4],
+    [6,0,8,0,0,4,0,2,1],
+    [0,0,0,2,5,8,0,6,0],
+    [9,2,0,3,1,0,4,0,0],
+    [0,0,0,4,0,2,7,8,0],
+    [0,0,5,0,8,9,0,0,0],
+    [2,0,0,0,0,7,1,0,0]
+]
+
+
+# Find possible numbers
+def get_candidates(row, col):
+
+    used = set(grid[row])
+
+    for i in range(9):
+        used.add(grid[i][col])
+
+    box_row = (row // 3) * 3
+    box_col = (col // 3) * 3
+
+    for i in range(box_row, box_row + 3):
+        for j in range(box_col, box_col + 3):
+            used.add(grid[i][j])
+
+    return set(range(1, 10)) - used
+
+
+# Sudoku Solver
+def solve():
+
+    # Constraint Propagation
+    for row in range(9):
+        for col in range(9):
+
+            if grid[row][col] == 0:
+
+                possible = get_candidates(row, col)
+
+                if len(possible) == 1:
+                    grid[row][col] = possible.pop()
+                    return solve()
+
+    # Find empty cell
+    for row in range(9):
+        for col in range(9):
+
+            if grid[row][col] == 0:
+
+                possible = get_candidates(row, col)
+
+                # Backtracking
+                for num in possible:
+
+                    grid[row][col] = num
+
+                    if solve():
+                        return True
+
+                    grid[row][col] = 0
+
+                return False
+
+    return True
+
+
+# Print Solution
+if solve():
+
+    print("Sudoku Solution:")
+
+    for row in grid:
+        print(row)
+
+else:
+    print("No Solution Exists")

@@ -1,0 +1,148 @@
+# Goal Stack Planning - Blocks World
+
+# Initial State
+state = {
+    ("ON", "B", "A"),
+    ("ONTABLE", "A"),
+    ("ONTABLE", "C"),
+    ("ONTABLE", "D"),
+    ("CLEAR", "B"),
+    ("CLEAR", "C"),
+    ("CLEAR", "D"),
+    ("ARMEMPTY",)
+}
+
+plan = []
+goal_stack = []
+
+
+# Execute Actions
+def execute(action):
+    name, x, *rest = action
+    y = rest[0] if rest else None
+
+    if name == "UNSTACK":
+        state.remove(("ON", x, y))
+        state.remove(("CLEAR", x))
+        state.remove(("ARMEMPTY",))
+        state.add(("CLEAR", y))
+        state.add(("HOLDING", x))
+
+    elif name == "PUTDOWN":
+        state.remove(("HOLDING", x))
+        state.add(("ONTABLE", x))
+        state.add(("CLEAR", x))
+        state.add(("ARMEMPTY",))
+
+    elif name == "PICKUP":
+        state.remove(("ONTABLE", x))
+        state.remove(("CLEAR", x))
+        state.remove(("ARMEMPTY",))
+        state.add(("HOLDING", x))
+
+    elif name == "STACK":
+        state.remove(("HOLDING", x))
+        state.remove(("CLEAR", y))
+        state.add(("ON", x, y))
+        state.add(("CLEAR", x))
+        state.add(("ARMEMPTY",))
+
+    plan.append(action)
+    print("Executed:", action)
+
+
+# Achieve ONTABLE goal
+def achieve_ontable(x):
+
+    goal_stack.append(("ONTABLE", x))
+
+    if ("ONTABLE", x) in state:
+        return
+
+    achieve_clear(x)
+
+    for fact in list(state):
+        if len(fact) == 3 and fact[0] == "ON" and fact[1] == x:
+            y = fact[2]
+            execute(("UNSTACK", x, y))
+            execute(("PUTDOWN", x))
+            return
+
+
+# Achieve CLEAR goal
+def achieve_clear(x):
+
+    goal_stack.append(("CLEAR", x))
+
+    if ("CLEAR", x) in state:
+        return
+
+    for fact in list(state):
+        if len(fact) == 3 and fact[0] == "ON" and fact[2] == x:
+            block = fact[1]
+            achieve_ontable(block)
+            return
+
+
+# Achieve HOLDING goal
+def achieve_holding(x):
+
+    goal_stack.append(("HOLDING", x))
+
+    if ("HOLDING", x) in state:
+        return
+
+    if ("ONTABLE", x) in state:
+        achieve_clear(x)
+        execute(("PICKUP", x))
+
+    else:
+        for fact in list(state):
+            if len(fact) == 3 and fact[0] == "ON" and fact[1] == x:
+                y = fact[2]
+                achieve_clear(x)
+                execute(("UNSTACK", x, y))
+                return
+
+
+# Achieve ON goal
+def achieve_on(x, y):
+
+    goal_stack.append(("ON", x, y))
+
+    if ("ON", x, y) in state:
+        return
+
+    achieve_clear(y)
+    achieve_holding(x)
+    execute(("STACK", x, y))
+
+
+# Goal Stack Planning
+print("Goal Stack Planning Started\n")
+
+# Goal 1: Put C on A
+achieve_on("C", "A")
+
+# Goal 2: Put B on D
+achieve_on("B", "D")
+
+# Final Goal Conditions
+goals = [
+    ("ONTABLE", "A"),
+    ("ON", "C", "A"),
+    ("ONTABLE", "D"),
+    ("ON", "B", "D")
+]
+
+print("\nFinal Goal State:")
+
+for goal in goals:
+    print(goal, ":", goal in state)
+
+print("\nFinal Plan:")
+
+for i, action in enumerate(plan, 1):
+    print("Step", i, ":", action)
+
+print("\nGoal Achieved Successfully!")

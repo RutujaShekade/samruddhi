@@ -1,0 +1,77 @@
+# Maze Solving using DFS
+
+maze = [
+    ['S', '.', '#', '.', '.', '.'],
+    ['.', '.', '#', '.', '#', '.'],
+    ['#', '.', '.', '.', '#', '.'],
+    ['.', '#', '#', '.', '.', '.'],
+    ['.', '.', '.', '#', '.', 'G']
+]
+
+rows = len(maze)
+cols = len(maze[0])
+
+start = (0, 0)
+goal = (4, 5)
+
+visited = set()
+
+# Possible movements
+moves = [
+    (1, 0),   # Down
+    (0, 1),   # Right
+    (-1, 0),  # Up
+    (0, -1)   # Left
+]
+
+# DFS Function
+def dfs(position):
+
+    if position == goal:
+        return [position]
+
+    visited.add(position)
+
+    r, c = position
+
+    for dr, dc in moves:
+
+        nr = r + dr
+        nc = c + dc
+
+        # Check valid position
+        if (0 <= nr < rows and
+            0 <= nc < cols and
+            maze[nr][nc] != '#' and
+            (nr, nc) not in visited):
+
+            result = dfs((nr, nc))
+
+            if result:
+                return [position] + result
+
+    return None
+
+
+# Execute DFS
+path = dfs(start)
+
+# Display result
+if path:
+
+    print("Path Found!")
+
+    print("Path:", path)
+
+    # Mark the path
+    for r, c in path:
+        if maze[r][c] not in ['S', 'G']:
+            maze[r][c] = '*'
+
+    print("\nSolved Maze:")
+
+    for row in maze:
+        print(" ".join(row))
+
+else:
+    print("No Path Found!")

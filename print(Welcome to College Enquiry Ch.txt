@@ -1,0 +1,37 @@
+print("Welcome to College Enquiry Chatbot!")
+print("Ask me anything about the college.")
+print("Type 'bye' to exit.")
+
+while True:
+    user = input("\nYou: ").lower()
+
+    if "hello" in user or "hi" in user:
+        print("Bot: Hello! Welcome to our college.")
+
+    elif "admission" in user:
+        print("Bot: Admissions are open. You can apply online.")
+
+    elif "courses" in user:
+        print("Bot: We offer Computer, IT, Mechanical, Civil and ENTC.")
+
+    elif "fees" in user:
+        print("Bot: Please visit the college office for fee details.")
+
+    elif "timing" in user:
+        print("Bot: College timing is 9 AM to 5 PM.")
+
+    elif "library" in user:
+        print("Bot: Our library is open from 9 AM to 4 PM.")
+
+    elif "placement" in user:
+        print("Bot: Our college provides placement training and campus interviews.")
+
+    elif "location" in user or "address" in user:
+        print("Bot: Our college is located in Pune.")
+
+    elif "bye" in user:
+        print("Bot: Thank you for contacting us. Goodbye!")
+        break
+
+    else:
+        print("Bot: Sorry, I didn't understand. Please ask another question.")

@@ -1,0 +1,89 @@
+from collections import deque
+
+# Initial and Goal States
+start = (0, 0, 0)
+goal = (2, 2, 2)
+
+# Rod names
+rods = ['A', 'B', 'C']
+
+
+# Generate possible moves
+def get_moves(state):
+
+    moves = []
+
+    for i in range(3):
+        # Find top disk on source rod
+        disks = [d for d in range(3) if state[d] == i]
+
+        if not disks:
+            continue
+
+        disk = min(disks)
+
+        for j in range(3):
+
+            if i != j:
+
+                # Check destination rod
+                target = [d for d in range(3) if state[d] == j]
+
+                if not target or disk < min(target):
+
+                    new_state = list(state)
+                    new_state[disk] = j
+
+                    moves.append((tuple(new_state),
+                                  disk + 1, rods[i], rods[j]))
+
+    return moves
+
+
+# BFS Search
+def bfs():
+
+    queue = deque([start])
+    visited = {start}
+    parent = {start: None}
+
+    while queue:
+
+        state = queue.popleft()
+
+        if state == goal:
+            break
+
+        for new_state, disk, source, destination in get_moves(state):
+
+            if new_state not in visited:
+
+                visited.add(new_state)
+                parent[new_state] = (
+                    state, disk, source, destination
+                )
+
+                queue.append(new_state)
+
+    # Print solution
+    path = []
+    state = goal
+
+    while state != start:
+        previous, disk, source, destination = parent[state]
+        path.append((disk, source, destination))
+        state = previous
+
+    path.reverse()
+
+    print("Tower of Hanoi Solution")
+
+    for i, move in enumerate(path, 1):
+        disk, source, destination = move
+        print("Move", i, ": Disk", disk,
+              "from", source, "to", destination)
+
+    print("Goal Reached!")
+
+
+bfs()

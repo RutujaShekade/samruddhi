@@ -1,0 +1,53 @@
+# Model-Based Agent for Grid Navigation
+
+grid = [
+    ['S', '.', '#'],
+    ['.', '#', '.'],
+    ['.', '.', 'G']
+]
+
+# Starting position
+position = [0, 0]
+
+# Internal state (visited positions)
+visited = []
+
+# Possible movements
+moves = [(0, 1), (1, 0), (0, -1), (-1, 0)]
+
+def agent(position):
+    x, y = position
+    visited.append((x, y))
+
+    if grid[x][y] == 'G':
+        return "Goal Reached"
+
+    for dx, dy in moves:
+        nx, ny = x + dx, y + dy
+
+        if (0 <= nx < 3 and 0 <= ny < 3):
+            if grid[nx][ny] != '#' and (nx, ny) not in visited:
+                return [nx, ny]
+
+    return "No Path Found"
+
+
+# Run the agent
+for i in range(10):
+
+    print("Current Position:", position)
+
+    result = agent(position)
+
+    if result == "Goal Reached":
+        print("Goal Reached!")
+        break
+
+    elif result == "No Path Found":
+        print("No Path Found!")
+        break
+
+    else:
+        position = result
+
+print("Visited Positions:", visited)

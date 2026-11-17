@@ -1,0 +1,37 @@
+print("Welcome to Railway Enquiry Chatbot!")
+print("Ask your railway-related questions.")
+print("Type 'bye' to exit.")
+
+while True:
+    user = input("\nYou: ").lower()
+
+    if "hello" in user or "hi" in user:
+        print("Bot: Hello! Welcome to Railway Enquiry.")
+
+    elif "train" in user:
+        print("Bot: You can check available trains on the railway website.")
+
+    elif "ticket" in user or "booking" in user:
+        print("Bot: You can book railway tickets through IRCTC.")
+
+    elif "pnr" in user:
+        print("Bot: You can check your PNR status on the IRCTC website.")
+
+    elif "platform" in user:
+        print("Bot: Please check the railway station display board.")
+
+    elif "timing" in user or "schedule" in user:
+        print("Bot: Train schedules are available on the railway website.")
+
+    elif "fare" in user or "price" in user:
+        print("Bot: Ticket fare depends on the train and travel class.")
+
+    elif "cancel" in user:
+        print("Bot: You can cancel your ticket through IRCTC.")
+
+    elif "bye" in user:
+        print("Bot: Thank you for using Railway Enquiry. Goodbye!")
+        break
+
+    else:
+        print("Bot: Sorry, I cannot understand your query.")

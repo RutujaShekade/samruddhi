@@ -1,0 +1,53 @@
+# Alpha-Beta Pruning Algorithm
+
+# Game Tree
+tree = ("A", [
+    ("B", [
+        ("D", [2, 3]),
+        ("E", [5, 9])
+    ]),
+    ("C", [
+        ("F", [0, 1]),
+        ("G", [7, 5])
+    ])
+])
+
+
+def alpha_beta(node, alpha, beta, maximizing):
+
+    if isinstance(node, int):
+        return node
+
+    name, children = node
+
+    if maximizing:
+        value = float('-inf')
+
+        for i, child in enumerate(children):
+            value = max(value, alpha_beta(child, alpha, beta, False))
+            alpha = max(alpha, value)
+
+            if alpha >= beta:
+                print("Pruned:", children[i+1:])
+                break
+
+        return value
+
+    else:
+        value = float('inf')
+
+        for i, child in enumerate(children):
+            value = min(value, alpha_beta(child, alpha, beta, True))
+            beta = min(beta, value)
+
+            if beta <= alpha:
+                print("Pruned:", children[i+1:])
+                break
+
+        return value
+
+
+# Start Alpha-Beta Search
+result = alpha_beta(tree, float('-inf'), float('inf'), True)
+
+print("Optimal Value:", result)

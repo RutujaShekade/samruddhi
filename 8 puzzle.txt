@@ -1,0 +1,185 @@
+import heapq
+
+start = (5, 4, 0,
+         6, 1, 8,
+         7, 3, 2)
+
+goal = (1, 2, 3,
+        8, 0, 4,
+        7, 6, 5)
+
+
+# Manhattan Distance Heuristic
+def heuristic(state):
+    distance = 0
+
+    for i in range(9):
+        if state[i] != 0:
+            goal_pos = goal.index(state[i])
+
+            x1, y1 = divmod(i, 3)
+            x2, y2 = divmod(goal_pos, 3)
+
+            distance += abs(x1-x2) + abs(y1-y2)
+
+    return distance
+
+
+# Check whether puzzle is solvable
+def inversions(state):
+    a = [x for x in state if x != 0]
+    count = 0
+
+    for i in range(len(a)):
+        for j in range(i+1, len(a)):
+            if a[i] > a[j]:
+                count += 1
+
+    return count
+
+
+# A* Algorithm
+def astar(start):
+
+    if inversions(start) % 2 != inversions(goal) % 2:
+        print("No solution exists!")
+        return
+
+    pq = [(heuristic(start), 0, start)]
+    visited = set()
+
+    while pq:
+
+        f, g, state = heapq.heappop(pq)
+
+        if state in visited:
+            continue
+
+        visited.add(state)
+
+        if state == goal:
+            print("Goal Reached!")
+            return
+
+        zero = state.index(0)
+        x, y = divmod(zero, 3)
+
+        moves = [(-1,0), (1,0), (0,-1), (0,1)]
+
+        for dx, dy in moves:
+
+            nx, ny = x+dx, y+dy
+
+            if 0 <= nx < 3 and 0 <= ny < 3:
+
+                new_pos = nx*3 + ny
+                new_state = list(state)
+
+                new_state[zero], new_state[new_pos] = (
+                    new_state[new_pos], new_state[zero])
+
+                new_state = tuple(new_state)
+
+                if new_state not in visited:
+                    new_g = g + 1
+                    new_f = new_g + heuristic(new_state)
+
+                    heapq.heappush(
+                        pq, (new_f, new_g, new_state)
+                    )
+
+
+astar(start)
+
+
+
+
+FOR ONLY * 8 PUZZLE PROLEM DIFF EX
+import heapq
+
+# Initial State
+start = (1, 2, 3,
+         4, 0, 6,
+         7, 5, 8)
+
+# Goal State
+goal = (1, 2, 3,
+        4, 5, 6,
+        7, 8, 0)
+
+
+# Manhattan Distance
+def heuristic(state):
+    distance = 0
+
+    for i in range(9):
+        if state[i] != 0:
+            j = goal.index(state[i])
+
+            x1, y1 = divmod(i, 3)
+            x2, y2 = divmod(j, 3)
+
+            distance += abs(x1-x2) + abs(y1-y2)
+
+    return distance
+
+
+# A* Search Algorithm
+def astar(start):
+
+    pq = [(heuristic(start), 0, start)]
+    visited = set()
+
+    while pq:
+
+        f, g, state = heapq.heappop(pq)
+
+        if state in visited:
+            continue
+
+        visited.add(state)
+
+        print("Current State:")
+
+        for i in range(0, 9, 3):
+            print(state[i:i+3])
+
+        print()
+
+        if state == goal:
+            print("Goal Reached!")
+            return
+
+        zero = state.index(0)
+        x, y = divmod(zero, 3)
+
+        moves = [(-1, 0), (1, 0),
+                 (0, -1), (0, 1)]
+
+        for dx, dy in moves:
+
+            nx, ny = x + dx, y + dy
+
+            if 0 <= nx < 3 and 0 <= ny < 3:
+
+                new_pos = nx * 3 + ny
+
+                new_state = list(state)
+
+                new_state[zero], new_state[new_pos] = \
+                    new_state[new_pos], new_state[zero]
+
+                new_state = tuple(new_state)
+
+                if new_state not in visited:
+
+                    new_g = g + 1
+                    new_f = new_g + heuristic(new_state)
+
+                    heapq.heappush(
+                        pq, (new_f, new_g, new_state)
+                    )
+
+
+# Run Program
+astar(start)

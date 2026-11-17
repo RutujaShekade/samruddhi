@@ -1,0 +1,103 @@
+# Missionaries and Cannibals using DFS
+
+# Initial and Goal States
+start = (3, 3, 'L')
+goal = (0, 0, 'R')
+
+visited = set()
+
+# Possible boat movements
+moves = [
+    (2, 0),  # 2 Missionaries
+    (0, 2),  # 2 Cannibals
+    (1, 1),  # 1 Missionary and 1 Cannibal
+    (1, 0),  # 1 Missionary
+    (0, 1)   # 1 Cannibal
+]
+
+# Check whether a state is valid
+def is_valid(m, c):
+
+    # Check boundaries
+    if m < 0 or m > 3 or c < 0 or c > 3:
+        return False
+
+    # Number on right bank
+    mr = 3 - m
+    cr = 3 - c
+
+    # Check safety conditions
+    if m > 0 and c > m:
+        return False
+
+    if mr > 0 and cr > mr:
+        return False
+
+    return True
+
+
+# DFS Function
+def dfs(state, path):
+
+    if state == goal:
+        return path
+
+    visited.add(state)
+
+    m, c, boat = state
+
+    for dm, dc in moves:
+
+        if boat == 'L':
+
+            # Move from left to right
+            if dm > m or dc > c:
+                continue
+
+            new_state = (m-dm, c-dc, 'R')
+
+        else:
+
+            # Move from right to left
+            if dm > 3-m or dc > 3-c:
+                continue
+
+            new_state = (m+dm, c+dc, 'L')
+
+        nm, nc, nb = new_state
+
+        # Check valid state
+        if is_valid(nm, nc):
+
+            if new_state not in visited:
+
+                result = dfs(
+                    new_state,
+                    path + [new_state]
+                )
+
+                if result is not None:
+                    return result
+
+    return None
+
+
+# Execute DFS
+solution = dfs(start, [])
+
+# Display solution
+if solution:
+
+    print("Solution Found!")
+
+    print("Initial State:", start)
+
+    for step, state in enumerate(solution, 1):
+        print("Step", step, ":", state)
+
+    print("Goal State:", goal)
+
+    print("Total Moves:", len(solution))
+
+else:
+    print("No Solution Found")

@@ -1,0 +1,37 @@
+
+
+def vacuum_agent(location, status):
+    if status == "Dirty":
+        return "Suck"
+    elif location == "A":
+        return "Move Right"
+    else:
+        return "Move Left"
+
+
+
+environment = {
+    "A": "Dirty",
+    "B": "Dirty"
+}
+
+location = "A"
+
+
+for i in range(5):
+    status = environment[location]
+
+    print("\nLocation:", location)
+    print("Status:", status)
+
+    action = vacuum_agent(location, status)
+    print("Action:", action)
+
+    if action == "Suck":
+        environment[location] = "Clean"
+    elif action == "Move Right":
+        location = "B"
+    elif action == "Move Left":
+        location = "A"
+
+print("\nFinal Environment:", environment)

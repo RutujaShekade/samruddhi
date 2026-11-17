@@ -1,0 +1,111 @@
+# Blocks World using DFS
+
+# Initial and Goal States
+start = (('B', 'C', 'D', 'A'),)
+goal = (('A', 'B', 'C', 'D'),)
+
+visited = set()
+
+# Normalize state
+def normalize(state):
+    return tuple(sorted(tuple(s) for s in state if s))
+
+
+# DFS Function
+def dfs(state, path):
+
+    if state == goal:
+        return path
+
+    if state in visited:
+        return None
+
+    visited.add(state)
+
+    moves = []
+
+    # Generate possible moves
+    for i, stack in enumerate(state):
+
+        if not stack:
+            continue
+
+        block = stack[-1]
+
+        remaining = list(state)
+        remaining[i] = stack[:-1]
+        remaining = [s for s in remaining if s]
+
+        # Move block to table
+        if len(stack) > 1:
+
+            new_state = normalize(
+                tuple(remaining + [(block,)])
+            )
+
+            moves.append((0, new_state,
+                          "Move " + block + " to table"))
+
+        # Move block onto another stack
+        for j, target in enumerate(remaining):
+
+            new_stack = list(remaining)
+            new_stack[j] = target + (block,)
+
+            new_state = normalize(tuple(new_stack))
+
+            # Check correct goal position
+            support = {
+                'B': 'A',
+                'C': 'B',
+                'D': 'C'
+            }
+
+            if support.get(block) == target[-1]:
+                priority = 1
+            else:
+                priority = 2
+
+            moves.append((priority, new_state,
+                          "Move " + block +
+                          " onto " + target[-1]))
+
+    # Explore moves according to priority
+    moves.sort(key=lambda x: x[0])
+
+    for priority, new_state, action in moves:
+
+        if new_state not in visited:
+
+            result = dfs(
+                new_state,
+                path + [(new_state, action)]
+            )
+
+            if result:
+                return result
+
+    return None
+
+
+# Execute DFS
+start = normalize(start)
+goal = normalize(goal)
+
+solution = dfs(start, [])
+
+# Display solution
+if solution:
+
+    print("Solution Found!")
+    print("Initial State:", start)
+
+    for step, (state, action) in enumerate(solution, 1):
+
+        print("Step", step, ":", action)
+        print("State:", state)
+
+    print("\nGoal State:", goal)
+
+else:
+    print("No Solution Found")

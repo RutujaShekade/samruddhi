@@ -1,0 +1,58 @@
+# Game Playing Agent using Minimax Algorithm
+
+# Game Tree
+tree = [
+    [3, 12, 8],
+    [2, 4, 6],
+    [14, 5, 2]
+]
+
+# Minimax Function
+def minimax(node, is_max):
+
+    # Leaf node
+    if isinstance(node, int):
+        return node
+
+    if is_max:
+
+        best = float('-inf')
+
+        for child in node:
+            value = minimax(child, False)
+            best = max(best, value)
+
+        return best
+
+    else:
+
+        best = float('inf')
+
+        for child in node:
+            value = minimax(child, True)
+            best = min(best, value)
+
+        return best
+
+
+# Calculate values of MIN nodes
+print("Minimax Algorithm\n")
+
+for i, branch in enumerate(tree):
+
+    value = minimax(branch, False)
+
+    print("Branch", i + 1, "MIN value:", value)
+
+
+# Calculate MAX value
+result = minimax(tree, True)
+
+# Find best move
+values = [min(branch) for branch in tree]
+
+best_move = values.index(result) + 1
+
+print("\nOptimal Value for MAX:", result)
+
+print("Best Move: Branch", best_move)

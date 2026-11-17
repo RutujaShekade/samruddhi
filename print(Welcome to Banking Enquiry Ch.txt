@@ -1,0 +1,37 @@
+print("Welcome to Banking Enquiry Chatbot!")
+print("How can I help you?")
+print("Type 'bye' to exit.")
+
+while True:
+    user = input("\nYou: ").lower()
+
+    if "hello" in user or "hi" in user:
+        print("Bot: Hello! Welcome to our bank.")
+
+    elif "account" in user:
+        print("Bot: You can open a savings or current account.")
+
+    elif "balance" in user:
+        print("Bot: Please use mobile banking or ATM to check your balance.")
+
+    elif "loan" in user:
+        print("Bot: We provide home loans, education loans and personal loans.")
+
+    elif "atm" in user:
+        print("Bot: Our bank provides ATM services 24/7.")
+
+    elif "ifsc" in user:
+        print("Bot: You can find the IFSC code on your bank passbook.")
+
+    elif "interest" in user:
+        print("Bot: Interest rates depend on the type of account or loan.")
+
+    elif "card" in user:
+        print("Bot: We provide debit cards and credit cards.")
+
+    elif "bye" in user:
+        print("Bot: Thank you for contacting our bank. Goodbye!")
+        break
+
+    else:
+        print("Bot: Sorry, I didn't understand your query.")

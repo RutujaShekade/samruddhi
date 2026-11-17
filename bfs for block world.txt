@@ -1,0 +1,99 @@
+from collections import deque
+
+# Initial and Goal States
+start = (('B',), ('C', 'A'))
+goal = (('C', 'B', 'A'),)
+
+# Convert state into canonical form
+def normalize(state):
+    return tuple(sorted(state))
+
+start = normalize(start)
+goal = normalize(goal)
+
+# BFS Algorithm
+def bfs(start, goal):
+
+    queue = deque([start])
+
+    visited = {start}
+
+    parent = {start: None}
+
+    while queue:
+
+        current = queue.popleft()
+
+        # Check goal state
+        if current == goal:
+            path = []
+
+            while current is not None:
+                path.append(current)
+                current = parent[current]
+
+            return path[::-1]
+
+        # Generate possible moves
+        for i in range(len(current)):
+
+            if not current[i]:
+                continue
+
+            block = current[i][-1]
+
+            # Remove top block
+            new_state = list(current)
+            new_stack = list(new_state[i])
+            new_stack.pop()
+
+            new_state[i] = tuple(new_stack)
+
+            # Remove empty stacks
+            new_state = [s for s in new_state if s]
+
+            # Move block to the table
+            state1 = normalize(
+                tuple(new_state + [(block,)])
+            )
+
+            if state1 not in visited:
+                visited.add(state1)
+                parent[state1] = current
+                queue.append(state1)
+
+            # Move block onto another stack
+            for j in range(len(new_state)):
+
+                temp = list(new_state)
+
+                new_stack = list(temp[j])
+                new_stack.append(block)
+
+                temp[j] = tuple(new_stack)
+
+                state2 = normalize(tuple(temp))
+
+                if state2 not in visited:
+                    visited.add(state2)
+                    parent[state2] = current
+                    queue.append(state2)
+
+    return None
+
+
+# Execute BFS
+solution = bfs(start, goal)
+
+# Display solution
+if solution:
+
+    print("Solution Found!\n")
+
+    for step, state in enumerate(solution):
+        print("Step", step, ":", state)
+
+    print("\nTotal Moves:", len(solution) - 1)
+
+else:
+    print("No Solution Found")

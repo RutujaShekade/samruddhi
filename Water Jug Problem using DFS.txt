@@ -1,0 +1,76 @@
+# Water Jug Problem using DFS
+
+# Capacities of jugs
+small = 2
+big = 5
+
+# Initial and goal states
+start = (0, 0)
+goal = (0, 1)
+
+visited = set()
+
+def dfs(state, path):
+
+    if state == goal:
+        return path
+
+    if state in visited:
+        return None
+
+    visited.add(state)
+
+    x, y = state
+
+    # Possible actions
+
+    next_states = [
+
+        ((2, y), "Fill 2 Gallon Jug"),
+
+        ((x, 5), "Fill 5 Gallon Jug"),
+
+        ((0, y), "Empty 2 Gallon Jug"),
+
+        ((x, 0), "Empty 5 Gallon Jug"),
+
+        ((x - min(x, 5-y),
+          y + min(x, 5-y)),
+         "Pour 2 Gallon into 5 Gallon"),
+
+        ((x + min(y, 2-x),
+          y - min(y, 2-x)),
+         "Pour 5 Gallon into 2 Gallon")
+    ]
+
+    for new_state, action in next_states:
+
+        if new_state not in visited and new_state != state:
+
+            result = dfs(
+                new_state,
+                path + [(new_state, action)]
+            )
+
+            if result:
+                return result
+
+    return None
+
+
+# Execute DFS
+solution = dfs(start, [])
+
+# Display result
+if solution:
+
+    print("Solution Found!")
+    print("Initial State:", start)
+
+    for state, action in solution:
+        print(action, "->", state)
+
+    print("Goal State:", goal)
+
+else:
+    print("No Solution Found")
